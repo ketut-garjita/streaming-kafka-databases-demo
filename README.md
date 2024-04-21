@@ -1,6 +1,8 @@
 # streaming-kafka-databases-demo
 
-## Install databases :
+## Install databases
+
+Whether:
 - mysql (linux)
 - postgresql (windows)
 - oracle (windows)
