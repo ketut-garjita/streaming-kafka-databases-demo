@@ -69,12 +69,12 @@ python3 -m pip install kafka-python
 
 -  Start Kafka Server
 
-  Open new Session 3
+    Open new Session 3
 
-  ```
-  cd $KAFKA_HOME
-  bin/kafka-server-start.sh config/server.properties
-  ```
+    ```
+    cd $KAFKA_HOME
+    bin/kafka-server-start.sh config/server.properties
+    ```
 
 - Create a Topic
 
