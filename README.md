@@ -18,9 +18,10 @@ Open session terminal (Session 1)
   sudo systemctl start mysql
   ```
 
-- Connect to the mysql server 
+- Connect to the mysql server
+  
 Make sure you use the password given to you when the MySQL server starts.
-Please make a note or record of the password because you will need it later.
+
 ```
 mysql --host=127.0.0.1 --port=3306 --user=root
 ```
