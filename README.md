@@ -50,7 +50,7 @@ wget https://archive.apache.org/dist/kafka/3.6.2/kafka_2.12-3.6.2.tgz
 tar -xzf kafka_2.12-3.6.2.tgz
 ```
 
-## Install the python module kafka-python using the pip command
+## Install "kafka-python" python module
 
 ```
 python3 -m pip install kafka-python
@@ -60,11 +60,11 @@ python3 -m pip install kafka-python
 
 - Start Zookeeper
   
-  Using existing Session 2
+  Use existing Session 2
 
   ```
-	cd $KAFKA_HOME
-	bin/zookeeper-server-start.sh config/zookeeper.properties
+  cd $KAFKA_HOME
+  bin/zookeeper-server-start.sh config/zookeeper.properties
   ```
 
 -  Start Kafka Server
@@ -89,7 +89,8 @@ python3 -m pip install kafka-python
 
 ## Create Toll Traffic Simulator
 
-This step only require one tine.
+This step only require one tinm.
+
 Open new Session 5
 
 Create file : $KAFKA_HOME/scripts/toll_traffic_generator.py
@@ -122,7 +123,7 @@ for _ in range(100000):
 
 ## Run the Toll Traffic Simulator
 
-Using existing Session 5
+Use existing Session 5
 
 ```
 python3 toll_traffic_generator.py
@@ -183,7 +184,7 @@ Create $KAFKA_HOME/scripts/streaming_data_reader.py script
 
 ## Run streaming_data_reader.py
 
-Using existing Session 6
+Use existing Session 6
 
   ```
   python3 streaming_data_reader.py
