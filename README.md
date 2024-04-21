@@ -146,7 +146,7 @@ Create $KAFKA_HOME/scripts/streaming_data_reader.py script
   TOPIC='toll'
   DATABASE = 'tolldata'
   USERNAME = 'root'
-  PASSWORD = 'password'
+  PASSWORD = 'mysql'
   
   print("Connecting to the database")
   try:
