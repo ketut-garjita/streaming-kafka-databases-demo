@@ -22,11 +22,11 @@ Open session terminal (Session 1)
 
 - Connect to the mysql server
   
-Make sure you use the password given to you when the MySQL server starts.
-
-```
-mysql --host=127.0.0.1 --port=3306 --user=root
-```
+  Make sure you use the password given to you when the MySQL server starts.
+  
+  ```
+  mysql --host=127.0.0.1 --port=3306 --user=root
+  ```
 
 - Create a database and table
 
@@ -41,14 +41,14 @@ mysql --host=127.0.0.1 --port=3306 --user=root
 Open a new session (Session 2)
 
 - Download kafka ((prefer latest version, example : https://archive.apache.org/dist/kafka/3.6.2/kafka_2.12-3.6.2.tgz)
-```
-wget https://archive.apache.org/dist/kafka/3.6.2/kafka_2.12-3.6.2.tgz
-```
+  ```
+  wget https://archive.apache.org/dist/kafka/3.6.2/kafka_2.12-3.6.2.tgz
+  ```
 
 - Extract Kafka.
-```
-tar -xzf kafka_2.12-3.6.2.tgz
-```
+  ```
+  tar -xzf kafka_2.12-3.6.2.tgz
+  ```
 
 ## Install "kafka-python" python module
 
@@ -186,17 +186,17 @@ Create $KAFKA_HOME/scripts/streaming_data_reader.py script
 
 Use existing Session 6
 
-  ```
-  python3 streaming_data_reader.py
-  ```
+```
+python3 streaming_data_reader.py
+```
 
 ## Health check of the streaming data pipeline
 
 Use existing Session 1 (database connection)
 
-  ```
-  use tolldata;
-  select count(*) from livetolldata;
-  select * from livetolldata limit 10;
-  ```
+```
+use tolldata;
+select count(*) from livetolldata;
+select * from livetolldata limit 10;
+```
 
