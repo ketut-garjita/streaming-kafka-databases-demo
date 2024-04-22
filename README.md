@@ -308,18 +308,18 @@ DuckDB : $KAFKA_HOME/scripts/streaming_data_reader_duckdb.py
   
 ## Run Data Streaming (Testing)
 
-1. MySQL
+1. MySQL   
    ```
    python streaming_data_reader_mysql.py
    ```
 
-2. PostgreSQL
-   '''
+3. PostgreSQL
+   ```
    python streaming_data_reader_postgres.py
    ```
 
-3. DuckDB
-   '''
+5. DuckDB
+   ```
    python streaming_data_reader_pduckdb.py
    ```
    
@@ -327,7 +327,6 @@ DuckDB : $KAFKA_HOME/scripts/streaming_data_reader_duckdb.py
 ## Health check of the streaming data pipeline
 
 - MySQL
-
   ```
   mysql --host=127.0.0.1 --port=3306 --user=root --password
   
@@ -337,7 +336,6 @@ DuckDB : $KAFKA_HOME/scripts/streaming_data_reader_duckdb.py
   ```
 
 - PostgreSQL
-
   ```
   psql -U postgres
   Password: ......
@@ -349,12 +347,10 @@ DuckDB : $KAFKA_HOME/scripts/streaming_data_reader_duckdb.py
 - Duckdb
 
   Stop (Ctrl-C) duckDB data streaming
-  
   ```
   cd $KAFKA_HOME/scripts
   duckdb  tolldata.db
   select count(*) from livetolldata;
   select * from livetolldata limit 10;
   ```
-
-  
+ 
