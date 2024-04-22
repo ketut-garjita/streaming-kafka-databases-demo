@@ -25,7 +25,7 @@ Open session terminal (Session 1)
   Make sure you use the password given to you when the MySQL server starts.
   
   ```
-  mysql --host=127.0.0.1 --port=3306 --user=root
+  mysql --host=127.0.0.1 --port=3306 --user=root --password=mysql
   ```
 
 - Create a database and table
