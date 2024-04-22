@@ -66,6 +66,32 @@ Open a new session
 python3 -m pip install kafka-python
 ```
 
+
+## Install Database Connection Library
+
+*Only needs to be done once*
+
+- Mysql (ver.8.0)
+  ```
+  pip install mysql-connector-python==8.0.33
+  ```
+
+- PostgreSQL
+  ```
+  pip install psycopg2
+  ```
+
+- Duckdb
+  ```
+  pip install duckdb
+  ```
+
+- Oracle
+  ```
+  pip install cx_Oracle
+  ```
+    
+
 ## Start Kafka
   
 - Start Zookeeper
