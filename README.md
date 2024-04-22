@@ -126,6 +126,7 @@ for _ in range(100000):
 Use existing Session 5
 
 ```
+cd $KAFKA_HOME/scrips
 python3 toll_traffic_generator.py
 ```
 
