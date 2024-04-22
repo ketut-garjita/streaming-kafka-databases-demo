@@ -110,7 +110,7 @@ python3 -m pip install kafka-python
   ```
   
 
-## Create Toll Traffic Simulator (one time)
+## Create Toll Traffic Simulator
 
 *Only needs to be done once*
 
