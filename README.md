@@ -84,7 +84,7 @@ python3 -m pip install kafka-python
 
   ```
   cd $KAFKA_HOME
-  bin/kafka-topics.sh --create --topic quickstart-events --bootstrap-server localhost:9092
+  bin/kafka-topics.sh --create --topic toll quickstart-events --bootstrap-server localhost:9092
   ```
 
 ## Create Toll Traffic Simulator
