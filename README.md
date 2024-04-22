@@ -196,6 +196,8 @@ python3 streaming_data_reader.py
 Use existing Session 1 (database connection)
 
 ```
+mysql --host=127.0.0.1 --port=3306 --user=root --password
+
 use tolldata;
 select count(*) from livetolldata;
 select * from livetolldata limit 10;
