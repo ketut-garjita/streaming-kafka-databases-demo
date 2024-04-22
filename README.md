@@ -1,6 +1,6 @@
 # streaming-kafka-databases-demo
 
-## Install databases
+## Install Databases
 
 *Only needs to be done once*
 
