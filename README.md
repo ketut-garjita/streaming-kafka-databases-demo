@@ -2,15 +2,18 @@
 
 ## Install databases
 
-Whether:
+*Only needs to be done once*
+
+Testing :
 - mysql (linux)
 - postgresql (windows)
 - oracle (windows)
 - duckdb (linux)
 
+
 ## Prepare Database Table 
 
-Example : MySQL
+*Only needs to be done once*
 
 Open session terminal (Session 1)
 
@@ -36,9 +39,14 @@ Open session terminal (Session 1)
   create table livetolldata ( timestamp datetime , vehicle_id int , vehicle_type char ( 15 ), toll_plaza_id smallint );
   ```
 
-## Install kafka
+- Same for another database platforms (postgresql, duckdb, oracle)
 
-Open a new session (Session 2)
+  
+## Install Kafka
+
+*Only needs to be done once*
+
+Open a new session
 
 - Download kafka ((prefer latest version, example : https://archive.apache.org/dist/kafka/3.6.2/kafka_2.12-3.6.2.tgz)
   ```
@@ -52,16 +60,18 @@ Open a new session (Session 2)
 
 ## Install "kafka-python" python module
 
+*Only needs to be done once*
+
 ```
 python3 -m pip install kafka-python
 ```
 
 ## Start Kafka
-
-- Start Zookeeper
   
-  Use existing Session 2
+- Start Zookeeper
 
+  Open new Session
+  
   ```
   cd $KAFKA_HOME
   bin/zookeeper-server-start.sh config/zookeeper.properties
@@ -69,7 +79,7 @@ python3 -m pip install kafka-python
 
 -  Start Kafka Server
 
-    Open new Session 3
+    Open new Session
 
     ```
     cd $KAFKA_HOME
@@ -78,7 +88,7 @@ python3 -m pip install kafka-python
 
 - Create a Topic
 
-  Open new Session 4
+  Open new Session
 
   Topic name : toll
 
@@ -87,11 +97,24 @@ python3 -m pip install kafka-python
   bin/kafka-topics.sh --create --topic toll quickstart-events --bootstrap-server localhost:9092
   ```
 
-## Create Toll Traffic Simulator
+- List a topic
+  ```
+  cd $KAFKA_HOME
+  bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+  ```
 
-This step only require one tinm.
+- Describe a topic
+  ```
+  cd $KAFKA_HOME
+  bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic toll
+  ```
+  
 
-Open new Session 5
+## Create Toll Traffic Simulator (one time)
+
+*Only needs to be done once*
+
+Open new Session
 
 Create file : $KAFKA_HOME/scripts/toll_traffic_generator.py
 
@@ -121,21 +144,21 @@ for _ in range(100000):
     sleep(random() * 2)
 ```
 
+
 ## Run the Toll Traffic Simulator
 
-Use existing Session 5
+Open new Session
 
 ```
 cd $KAFKA_HOME/scripts
 python3 toll_traffic_generator.py
 ```
 
-## Create streaming_data_reader.py
 
-Open new Session 6
+## Create Data Streaming Script
 
-Create $KAFKA_HOME/scripts/streaming_data_reader.py script
-
+MySQL  : $KAFKA_HOME/scripts/streaming_data_reader_mysql.py
+  
   ```
   """
   Streaming data consumer
@@ -183,23 +206,155 @@ Create $KAFKA_HOME/scripts/streaming_data_reader.py script
   connection.close()
   ```
 
-## Run streaming_data_reader.py
+PostgresSQL : $KAFKA_HOME/scripts/streaming_data_reader_postgres.py
+  
+  ```
+  """
+  Streaming data consumer
+  """
+  from datetime import datetime
+  from kafka import KafkaConsumer
+  import psycopg2
+  import sys
+  
+  con = None
+  
+  TOPIC='toll'
+  DATABASE = 'tolldata'
+  USERNAME = 'postgres'
+  PASSWORD = 'postgres'
+  
+  print("Connecting to the database")
+  try:
+          connection = psycopg2.connect(host='192.168.68.1', database=DATABASE, user=USERNAME, password=PASSWORD)
+  except Exception:
+          print("Could not connect to database. Please check credentials")
+  else:
+          print("Connected to database")
+  cursor = connection.cursor()
+  
+  print("Connecting to Kafka")
+  consumer = KafkaConsumer(TOPIC)
+  print("Connected to Kafka")
+  print(f"Reading messages from the topic {TOPIC}")
+  for msg in consumer:
+  
+      # Extract information from kafka
+  
+      message = msg.value.decode("utf-8")
+  
+      # Transform the date format to suit the database schema
+      (timestamp, vehcile_id, vehicle_type, plaza_id) = message.split(",")
+  
+      dateobj = datetime.strptime(timestamp, '%a %b %d %H:%M:%S %Y')
+      timestamp = dateobj.strftime("%Y-%m-%d %H:%M:%S")
+  
+      # Loading data into the database table
+  
+      sql = "insert into livetolldata values(%s,%s,%s,%s)"
+      result = cursor.execute(sql, (timestamp, vehcile_id, vehicle_type, plaza_id))
+      print(f"A {vehicle_type} was inserted into the database")
+      connection.commit()
+  connection.close()
+  ```
 
-Use existing Session 6
+DuckDB : $KAFKA_HOME/scripts/streaming_data_reader_duckdb.py
 
-```
-python3 streaming_data_reader.py
-```
+  ```
+  """
+  Streaming data consumer
+  """
+  from datetime import datetime
+  from kafka import KafkaConsumer
+  
+  from duckdb import connect
+  
+  TOPIC='toll'
+  
+  print("Connecting to the database")
+  try:
+          connection = connect(database='tolldata.db', read_only=False)  # Change the database file name as needed
+  except Exception:
+          print("Could not connect to database. Please check credentials")
+  else:
+          print("Connected to database")
+  cursor = connection.cursor()
+  
+  print("Connecting to Kafka")
+  consumer = KafkaConsumer(TOPIC)
+  print("Connected to Kafka")
+  print(f"Reading messages from the topic {TOPIC}")
+  for msg in consumer:
+  
+      # Extract information from kafka
+  
+      message = msg.value.decode("utf-8")
+  
+      # Transform the date format to suit the database schema
+      (timestamp, vehcile_id, vehicle_type, plaza_id) = message.split(",")
+  
+      dateobj = datetime.strptime(timestamp, '%a %b %d %H:%M:%S %Y')
+      timestamp = dateobj.strftime("%Y-%m-%d %H:%M:%S")
+  
+      # Loading data into the database table
+  
+      sql = "insert into livetolldata values(?,?,?,?)"
+      result = cursor.execute(sql, (timestamp, vehcile_id, vehicle_type, plaza_id))
+      print(f"A {vehicle_type} was inserted into the database")
+      connection.commit()
+  connection.close()
+  ```
+
+  
+## Run Data Streaming (Testing)
+
+1. MySQL
+   ```
+   python streaming_data_reader_mysql.py
+   ```
+
+2. PostgreSQL
+   '''
+   python streaming_data_reader_postgres.py
+   ```
+
+3. DuckDB
+   '''
+   python streaming_data_reader_pduckdb.py
+   ```
+   
 
 ## Health check of the streaming data pipeline
 
-Use existing Session 1 (database connection)
+- MySQL
 
-```
-mysql --host=127.0.0.1 --port=3306 --user=root --password
+  ```
+  mysql --host=127.0.0.1 --port=3306 --user=root --password
+  
+  use tolldata;
+  select count(*) from livetolldata;
+  select * from livetolldata limit 10;
+  ```
 
-use tolldata;
-select count(*) from livetolldata;
-select * from livetolldata limit 10;
-```
+- PostgreSQL
 
+  ```
+  psql -U postgres
+  Password: ......
+  \c tolldata
+  select count(*) from livetolldata;
+  select * from livetolldata limit 10;
+  ```
+
+- Duckdb
+
+  Stop (Ctrl-C) duckDB data streaming
+  
+  ```
+  cd $KAFKA_HOME/scripts
+  duckdb  tolldata.db
+  select count(*) from livetolldata;
+  select * from livetolldata limit 10;
+  ```
+
+  
